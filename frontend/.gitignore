@@ -5,11 +5,16 @@
 /tmp
 /out-tsc
 /bazel-out
+*.js.map
+*.css.map
 
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+package-lock.json.bak
+.pnpm-debug.log*
+.yarn-integrity
 
 # IDEs and editors
 .idea/
@@ -31,6 +36,7 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+/.angular
 .sass-cache/
 /connect.lock
 /coverage
@@ -38,6 +44,11 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+*.log
+*.tmp
+e2e/*.js
+e2e/*.map
+.nx/
 
 # System files
 .DS_Store

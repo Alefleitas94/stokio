@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Stokio.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8873044ffb99618c4d55a00b3a929743ae8d827")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72134803d510d5060a4eb84ad1e23f190655265b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Stokio.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Stokio.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

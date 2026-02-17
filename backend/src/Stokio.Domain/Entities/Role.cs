@@ -10,5 +10,5 @@ public class Role : BaseEntity, ITenantEntity
     
     // Navigation properties
     public Tenant Tenant { get; set; } = null!;
-    public ICollection<User> Users { get; set; } = new List<User>();
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

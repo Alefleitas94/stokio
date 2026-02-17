@@ -10,6 +10,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => u.Id);
 
+        builder.HasAlternateKey(u => new { u.TenantId, u.Id });
+
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(200);
@@ -32,9 +34,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithMany(t => t.Users)
             .HasForeignKey(u => u.TenantId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasMany(u => u.Roles)
-            .WithMany(r => r.Users)
-            .UsingEntity(j => j.ToTable("UserRoles"));
     }
 }

@@ -13,5 +13,6 @@ public class Tenant : BaseEntity
     public ICollection<Product> Products { get; set; } = new List<Product>();
     public ICollection<Category> Categories { get; set; } = new List<Category>();
     public ICollection<Warehouse> Warehouses { get; set; } = new List<Warehouse>();
+    public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     public ICollection<TenantModule> TenantModules { get; set; } = new List<TenantModule>();
 }

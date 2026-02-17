@@ -22,21 +22,6 @@ namespace Stokio.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("UserRoles", (string)null);
-                });
-
             modelBuilder.Entity("Stokio.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -74,6 +59,45 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Stokio.Domain.Entities.Module", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.ToTable("Modules");
                 });
 
             modelBuilder.Entity("Stokio.Domain.Entities.Product", b =>
@@ -161,8 +185,6 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
 
                     b.HasIndex("Name", "TenantId")
                         .IsUnique();
@@ -259,6 +281,39 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                     b.ToTable("Tenants");
                 });
 
+            modelBuilder.Entity("Stokio.Domain.Entities.TenantModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.HasIndex("TenantId", "ModuleId")
+                        .IsUnique();
+
+                    b.ToTable("TenantModules");
+                });
+
             modelBuilder.Entity("Stokio.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -300,12 +355,30 @@ namespace Stokio.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId");
-
                     b.HasIndex("Email", "TenantId")
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Stokio.Domain.Entities.UserRole", b =>
+                {
+                    b.Property<int>("TenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TenantId", "UserId", "RoleId");
+
+                    b.HasIndex("TenantId", "RoleId");
+
+                    b.HasIndex("TenantId", "UserId");
+
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Stokio.Domain.Entities.Warehouse", b =>
@@ -353,21 +426,6 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Warehouses");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.HasOne("Stokio.Domain.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Stokio.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Stokio.Domain.Entities.Category", b =>
@@ -452,6 +510,25 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                     b.Navigation("Warehouse");
                 });
 
+            modelBuilder.Entity("Stokio.Domain.Entities.TenantModule", b =>
+                {
+                    b.HasOne("Stokio.Domain.Entities.Module", "Module")
+                        .WithMany("TenantModules")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Stokio.Domain.Entities.Tenant", "Tenant")
+                        .WithMany("TenantModules")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Module");
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("Stokio.Domain.Entities.User", b =>
                 {
                     b.HasOne("Stokio.Domain.Entities.Tenant", "Tenant")
@@ -461,6 +538,35 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("Stokio.Domain.Entities.UserRole", b =>
+                {
+                    b.HasOne("Stokio.Domain.Entities.Tenant", "Tenant")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Stokio.Domain.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("TenantId", "RoleId")
+                        .HasPrincipalKey("TenantId", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Stokio.Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("TenantId", "UserId")
+                        .HasPrincipalKey("TenantId", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Tenant");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Stokio.Domain.Entities.Warehouse", b =>
@@ -481,9 +587,19 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                     b.Navigation("SubCategories");
                 });
 
+            modelBuilder.Entity("Stokio.Domain.Entities.Module", b =>
+                {
+                    b.Navigation("TenantModules");
+                });
+
             modelBuilder.Entity("Stokio.Domain.Entities.Product", b =>
                 {
                     b.Navigation("StockMovements");
+                });
+
+            modelBuilder.Entity("Stokio.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Stokio.Domain.Entities.Tenant", b =>
@@ -492,9 +608,18 @@ namespace Stokio.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Products");
 
+                    b.Navigation("TenantModules");
+
+                    b.Navigation("UserRoles");
+
                     b.Navigation("Users");
 
                     b.Navigation("Warehouses");
+                });
+
+            modelBuilder.Entity("Stokio.Domain.Entities.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Stokio.Domain.Entities.Warehouse", b =>

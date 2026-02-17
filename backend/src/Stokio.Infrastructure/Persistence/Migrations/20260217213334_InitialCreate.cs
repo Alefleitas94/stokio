@@ -13,6 +13,24 @@ namespace Stokio.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Modules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Key = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modules", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tenants",
                 columns: table => new
                 {
@@ -74,8 +92,38 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.UniqueConstraint("AK_Roles_TenantId_Id", x => new { x.TenantId, x.Id });
                     table.ForeignKey(
                         name: "FK_Roles_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TenantModules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TenantId = table.Column<int>(type: "integer", nullable: false),
+                    ModuleId = table.Column<int>(type: "integer", nullable: false),
+                    IsEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TenantModules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TenantModules_Modules_ModuleId",
+                        column: x => x.ModuleId,
+                        principalTable: "Modules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TenantModules_Tenants_TenantId",
                         column: x => x.TenantId,
                         principalTable: "Tenants",
                         principalColumn: "Id",
@@ -100,6 +148,7 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.UniqueConstraint("AK_Users_TenantId_Id", x => new { x.TenantId, x.Id });
                     table.ForeignKey(
                         name: "FK_Users_Tenants_TenantId",
                         column: x => x.TenantId,
@@ -172,23 +221,30 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 name: "UserRoles",
                 columns: table => new
                 {
-                    RolesId = table.Column<int>(type: "integer", nullable: false),
-                    UsersId = table.Column<int>(type: "integer", nullable: false)
+                    TenantId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.RolesId, x.UsersId });
+                    table.PrimaryKey("PK_UserRoles", x => new { x.TenantId, x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RolesId",
-                        column: x => x.RolesId,
+                        name: "FK_UserRoles_Roles_TenantId_RoleId",
+                        columns: x => new { x.TenantId, x.RoleId },
                         principalTable: "Roles",
+                        principalColumns: new[] { "TenantId", "Id" },
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRoles_Users_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_UserRoles_Users_TenantId_UserId",
+                        columns: x => new { x.TenantId, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumns: new[] { "TenantId", "Id" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -249,6 +305,12 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 column: "TenantId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Modules_Key",
+                table: "Modules",
+                column: "Key",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -271,11 +333,6 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_TenantId",
-                table: "Roles",
-                column: "TenantId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_StockMovements_ProductId",
                 table: "StockMovements",
                 column: "ProductId");
@@ -296,26 +353,37 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TenantModules_ModuleId",
+                table: "TenantModules",
+                column: "ModuleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TenantModules_TenantId_ModuleId",
+                table: "TenantModules",
+                columns: new[] { "TenantId", "ModuleId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tenants_Subdomain",
                 table: "Tenants",
                 column: "Subdomain",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_UsersId",
+                name: "IX_UserRoles_TenantId_RoleId",
                 table: "UserRoles",
-                column: "UsersId");
+                columns: new[] { "TenantId", "RoleId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_TenantId_UserId",
+                table: "UserRoles",
+                columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email_TenantId",
                 table: "Users",
                 columns: new[] { "Email", "TenantId" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_TenantId",
-                table: "Users",
-                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Warehouses_TenantId",
@@ -330,6 +398,9 @@ namespace Stokio.Infrastructure.Persistence.Migrations
                 name: "StockMovements");
 
             migrationBuilder.DropTable(
+                name: "TenantModules");
+
+            migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
@@ -337,6 +408,9 @@ namespace Stokio.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Warehouses");
+
+            migrationBuilder.DropTable(
+                name: "Modules");
 
             migrationBuilder.DropTable(
                 name: "Roles");

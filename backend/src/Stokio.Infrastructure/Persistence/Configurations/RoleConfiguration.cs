@@ -10,6 +10,8 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {
         builder.HasKey(r => r.Id);
 
+        builder.HasAlternateKey(r => new { r.TenantId, r.Id });
+
         builder.Property(r => r.Name)
             .IsRequired()
             .HasMaxLength(100);

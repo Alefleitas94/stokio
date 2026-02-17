@@ -1,0 +1,12 @@
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/bin/Debug/net10.0/Stokio.Domain.deps.json
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/bin/Debug/net10.0/Stokio.Domain.dll
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/bin/Debug/net10.0/Stokio.Domain.pdb
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.AssemblyInfoInputs.cache
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.AssemblyInfo.cs
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.csproj.CoreCompileInputs.cache
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.sourcelink.json
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.dll
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/refint/Stokio.Domain.dll
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/Stokio.Domain.pdb
+/home/runner/work/stokio/stokio/backend/src/Stokio.Domain/obj/Debug/net10.0/ref/Stokio.Domain.dll

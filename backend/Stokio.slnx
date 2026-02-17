@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Stokio.Api/Stokio.Api.csproj" />
+    <Project Path="src/Stokio.Application/Stokio.Application.csproj" />
+    <Project Path="src/Stokio.Domain/Stokio.Domain.csproj" />
+    <Project Path="src/Stokio.Infrastructure/Stokio.Infrastructure.csproj" />
+  </Folder>
+</Solution>

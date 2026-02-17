@@ -26,6 +26,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Warehouse> Warehouses => Set<Warehouse>();
     public DbSet<StockMovement> StockMovements => Set<StockMovement>();
+    public DbSet<Module> Modules => Set<Module>();
+    public DbSet<TenantModule> TenantModules => Set<TenantModule>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

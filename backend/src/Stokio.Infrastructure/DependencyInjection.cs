@@ -25,6 +25,9 @@ public static class DependencyInjection
 
         // Services
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<CurrentTenantService>();
+        services.AddScoped<ICurrentTenantService>(sp => sp.GetRequiredService<CurrentTenantService>());
+        services.AddScoped<IFeatureFlagService, FeatureFlagService>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
         return services;

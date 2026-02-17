@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Stokio.Application;
+using Stokio.Api.Middleware;
 using Stokio.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +67,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
+app.UseMiddleware<TenantResolutionMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

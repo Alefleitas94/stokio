@@ -59,9 +59,17 @@ cd backend
 {
   "ConnectionStrings": {
     "DefaultConnection": "Host=localhost;Database=stokio;Username=postgres;Password=your_password"
+  },
+  "JwtSettings": {
+    "Secret": "CHANGE_THIS_TO_A_SECURE_RANDOM_STRING_AT_LEAST_32_CHARACTERS_LONG",
+    "Issuer": "StokioApi",
+    "Audience": "StokioClient",
+    "ExpirationHours": "24"
   }
 }
 ```
+
+⚠️ **Importante**: Cambia el `Secret` en JwtSettings por una cadena aleatoria segura de al menos 32 caracteres antes de usar en producción.
 
 3. Crear la base de datos con migraciones:
 ```bash

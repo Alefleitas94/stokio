@@ -211,6 +211,30 @@ stokio/
 - Unique indexes on business keys (Subdomain, Email+TenantId, SKU+TenantId)
 - Check constraints could be added for business rules
 
+## Security Considerations
+
+### Implemented
+✅ **JWT Authentication** - Token-based authentication infrastructure
+✅ **Password Hashing** - User entity has PasswordHash (not plain text)
+✅ **CORS Configuration** - Limited to specific origins
+✅ **Multi-tenancy** - Data isolation at the entity level
+
+### To Be Implemented
+⚠️ **Environment Variables** - Move secrets to environment variables or Azure Key Vault
+⚠️ **HTTPS Enforcement** - Already configured in development
+⚠️ **Password Hashing Implementation** - Add proper password hashing (bcrypt/Argon2)
+⚠️ **Rate Limiting** - Add API rate limiting
+⚠️ **Input Validation** - Add request validation with FluentValidation
+⚠️ **SQL Injection Protection** - EF Core provides protection, but validate all inputs
+⚠️ **XSS Protection** - Angular provides built-in XSS protection
+⚠️ **CSRF Protection** - Implement CSRF tokens for state-changing operations
+
+### Security Notes
+🔐 **JWT Secret**: Change the default JWT secret in appsettings.json to a secure random string (minimum 32 characters)
+🔐 **Database Password**: Never commit production database credentials
+🔐 **Environment Variables**: Use environment variables or secret management for sensitive data in production
+🔐 **HTTPS**: Always use HTTPS in production
+
 ## Next Steps (Not Implemented)
 
 1. **Authentication Endpoints** - Login, register, refresh token

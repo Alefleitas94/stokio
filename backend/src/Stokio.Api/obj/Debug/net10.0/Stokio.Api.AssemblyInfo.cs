@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Stokio.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72134803d510d5060a4eb84ad1e23f190655265b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+05e1dd6a6ec105dafb715846e1bc11bdb3404126")]
 [assembly: System.Reflection.AssemblyProductAttribute("Stokio.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Stokio.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

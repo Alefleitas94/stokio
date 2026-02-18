@@ -1,0 +1,68 @@
+<div class="min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <div class="rounded-xl border p-6">
+      <h1 class="text-2xl font-semibold">Iniciar sesión</h1>
+      <p class="mt-1 text-sm text-gray-600">Accedé a tu tenant.</p>
+
+      <form class="mt-6 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+        <div>
+          <label class="block text-sm font-medium" for="subdomain">Subdominio</label>
+          <input
+            id="subdomain"
+            type="text"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            formControlName="subdomain"
+            autocomplete="organization"
+          />
+          <p class="mt-1 text-xs text-gray-600">Ej: <span class="font-mono">demo</span></p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium" for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            formControlName="email"
+            autocomplete="email"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium" for="password">Contraseña</label>
+          <input
+            id="password"
+            type="password"
+            class="mt-1 w-full rounded-md border px-3 py-2"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        @if (errorMessage()) {
+          <div class="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        @if (successMessage()) {
+          <div class="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-700">
+            {{ successMessage() }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          class="w-full rounded-md border px-3 py-2 font-medium"
+          [disabled]="isSubmitting()"
+        >
+          @if (isSubmitting()) { <span>Ingresando…</span> } @else { <span>Ingresar</span> }
+        </button>
+      </form>
+    </div>
+
+    <p class="mt-4 text-center text-xs text-gray-600">
+      Tenant + email + contraseña (JWT con <span class="font-mono">tenantId</span>).
+    </p>
+  </div>
+</div>

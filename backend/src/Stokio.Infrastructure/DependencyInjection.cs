@@ -30,6 +30,8 @@ public static class DependencyInjection
         services.AddScoped<IFeatureFlagService, FeatureFlagService>();
         services.AddScoped<IInventoryService, InventoryService>();
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return services;
     }
